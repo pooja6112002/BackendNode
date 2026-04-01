@@ -1,0 +1,12 @@
+[
+  { "id": 1, "name": "Python Programming" },
+  { "id": 2, "name": "Data Structures" },
+  { "id": 3, "name": "Operating System" },
+  { "id": 4, "name": "Database Management System" },
+  { "id": 5, "name": "Web Development" },
+  { "id": 6, "name": "Artificial Intelligence" },
+  { "id": 7, "name": "Machine Learning" },
+  { "id": 8, "name": "Computer Networks" },
+  { "id": 9, "name": "Software Engineering" },
+  { "id": 10, "name": "Cloud Computing" }
+]
