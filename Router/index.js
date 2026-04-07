@@ -13,7 +13,7 @@ router.get('/getstudentmarks', (req, res) => {
 
    res.render('home', { users });
 });
-router.get('/getdata',usr.verifyToken, st.getstudentdata);
+router.get('/getdata', st.getstudentdata);
 router.post('/addstudent', st.insertstudentdata);
 router.put('/updatestudent', st.updatestudentdata);
 router.delete('/deletestudent',st.deletestudentdata);
