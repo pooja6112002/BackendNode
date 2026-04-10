@@ -60,35 +60,25 @@ const loginUser = async (req, res) => {
 
 
 const verifyToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
+  const token = req.headers["authorization"];   // 🔥 direct token
 
-  
-  if (!authHeader) {
+  console.log("TOKEN:", token); // debug
+
+  if (!token) {
     return res.status(403).json({
       message: "Token required"
     });
   }
 
-
-  const token = authHeader.split(" ")[0];
-
-  if (!token) {
-    return res.status(401).json({
-      message: "Token missing"
-    });
-  }
-
-  
   jwt.verify(token, SECRET_KEY, (err, decoded) => {
     if (err) {
-      console.log("JWT Error:", err.message); // debug
+      console.log("JWT ERROR:", err.message);
       return res.status(401).json({
         message: "Invalid token"
       });
     }
 
     req.user = decoded;
-    console.log("Decoded token:", decoded);
     next();
   });
 };

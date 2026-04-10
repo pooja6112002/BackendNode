@@ -1,44 +1,102 @@
- const database=require('../database/db');
-const getteacherdata= async(req, res) => {
-   try {
-   const db=await database();
-    const collection= db.collection('teacher');
-    const result=await collection.find({}).toArray();
-     res.json({
-    message: 'Teacher records retrieved successfully',
-    data: result
-  });
-}
-catch(err){
+const database = require('../database/db');
+
+// ✅ GET ALL TEACHERS
+const getteacherdata = async (req, res) => {
+  try {
+    const db = await database();
+    const collection = db.collection('teacher');
+
+    const result = await collection.find({}).toArray();
+
+    res.json({
+      message: 'Teacher records retrieved successfully',
+      data: result
+    });
+
+  } catch (err) {
     console.error('Error fetching teacher data:', err);
-    res.status(500).json({ message: 'Internal Server Error' });  
-} 
-}
-const insertteacherdata= (req, res) => {
- res.json({
-    message: 'Teacher added successfully',
-    data: req.body
-  });
-}
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
-const updateteacherdata= (req, res) => {
- res.json({
-    message: 'Teacher update successfully',
-    data: req.body,
-    id: req.query.id
-  });
-}
+// ✅ INSERT TEACHER (Single + Multiple)
+const insertteacherdata = async (req, res) => {
+  try {
+    const db = await database();
+    const collection = db.collection('teacher');
 
-const deleteteacherdata= (req, res) => {
- res.json({
-    message: 'Teacher deleted successfully',
-    data: req.body,
-    id: req.query.id
-  });
-}
+    const data = req.body;
+
+    let result;
+
+    if (Array.isArray(data)) {
+      result = await collection.insertMany(data); // 🔥 bulk
+    } else {
+      result = await collection.insertOne(data); // single
+    }
+
+    res.status(201).json({
+      message: 'Teacher added successfully',
+      data: result
+    });
+
+  } catch (err) {
+    console.error('Error inserting teacher:', err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// ✅ UPDATE TEACHER
+const updateteacherdata = async (req, res) => {
+  try {
+    const db = await database();
+    const collection = db.collection('teacher');
+
+    const id = Number(req.query.id);
+
+    const result = await collection.updateOne(
+      { id: id },
+      { $set: req.body }
+    );
+
+    res.json({
+      message: 'Teacher updated successfully',
+      data: result
+    });
+
+  } catch (err) {
+    console.error('Error updating teacher:', err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// ✅ DELETE TEACHER
+const deleteteacherdata = async (req, res) => {
+  try {
+    const db = await database();
+    const collection = db.collection('teacher');
+
+    const id = Number(req.query.id);
+
+    const result = await collection.deleteOne({ id: id });
+
+    res.json({
+      message: 'Teacher deleted successfully',
+      data: result
+    });
+
+  } catch (err) {
+    console.error('Error deleting teacher:', err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
-  getteacherdata,insertteacherdata,updateteacherdata,deleteteacherdata
-}
+  getteacherdata,
+  insertteacherdata,
+  updateteacherdata,
+  deleteteacherdata
+};
 
 // const fs = require('fs');
 // const getteacherdata= (req, res) => {
